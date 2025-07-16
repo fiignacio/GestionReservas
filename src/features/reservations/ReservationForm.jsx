@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import { format, parseISO, isAfter, differenceInNights } from 'date-fns';
+import { format } from 'date-fns/format';
+import { parseISO } from 'date-fns/parseISO';
+import { isAfter } from 'date-fns/isAfter';
+import { differenceInNights } from 'date-fns/differenceInNights';
 
 
 const ReservationForm = ({ reservation, onDone }) => {
     const { addReservation, updateReservation, isSubmitting } = useReservationsContext();
     
-    // El estado inicial ahora incluye todos los nuevos campos.
     const [formData, setFormData] = useState({
         nombreCliente: '',
         adultos: 1,
@@ -25,7 +27,6 @@ const ReservationForm = ({ reservation, onDone }) => {
         estado: 'Pendiente',
     });
 
-    // useEffect para rellenar el formulario cuando se edita una reserva.
     useEffect(() => {
         if (reservation) {
             setFormData({
@@ -46,7 +47,6 @@ const ReservationForm = ({ reservation, onDone }) => {
         }
     }, [reservation]);
 
-    // useEffect para calcular el precio total automáticamente.
     useEffect(() => {
         const { fechaCheckIn, fechaCheckOut, adultos, ninos, temporada } = formData;
         if (fechaCheckIn && fechaCheckOut) {
@@ -65,7 +65,6 @@ const ReservationForm = ({ reservation, onDone }) => {
         }
     }, [formData.fechaCheckIn, formData.fechaCheckOut, formData.adultos, formData.ninos, formData.temporada]);
 
-    // useEffect para calcular el abono automáticamente si es 50%.
     useEffect(() => {
         if (formData.tipoAbono === 'porcentaje') {
             setFormData(prev => ({ ...prev, montoAbono: prev.precioTotal * 0.5 }));
@@ -97,7 +96,6 @@ const ReservationForm = ({ reservation, onDone }) => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Cliente y Fechas */}
             <div>
                 <label htmlFor="nombreCliente" className="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
                 <Input id="nombreCliente" name="nombreCliente" value={formData.nombreCliente} onChange={handleChange} required />
@@ -112,8 +110,6 @@ const ReservationForm = ({ reservation, onDone }) => {
                     <Input id="fechaCheckOut" name="fechaCheckOut" type="date" value={formData.fechaCheckOut} onChange={handleChange} required />
                 </div>
             </div>
-
-            {/* Pasajeros y Temporada */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-2">Pasajeros</h4>
@@ -140,8 +136,6 @@ const ReservationForm = ({ reservation, onDone }) => {
                     </div>
                 </div>
             </div>
-
-            {/* Vuelos */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-2">Vuelo de Llegada</h4>
@@ -158,8 +152,6 @@ const ReservationForm = ({ reservation, onDone }) => {
                     </div>
                 </div>
             </div>
-            
-            {/* Abono y Precio */}
             <div className="border-t pt-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -182,8 +174,6 @@ const ReservationForm = ({ reservation, onDone }) => {
                     </div>
                 </div>
             </div>
-
-            {/* Botón de envío */}
             <div className="flex justify-end pt-4">
                 <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Guardando...' : (reservation ? 'Actualizar Reserva' : 'Crear Reserva')}
