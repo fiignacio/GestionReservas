@@ -1,4 +1,3 @@
-// ReservationTable.jsx
 const ReservationTable = ({ onEdit }) => {
     const { reservations, loading, error, deleteReservation } = useReservationsContext();
     const [searchTerm, setSearchTerm] = useState('');

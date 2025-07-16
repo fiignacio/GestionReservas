@@ -1,4 +1,3 @@
-// ReservationsTimeline.jsx
 const ReservationsTimeline = () => {
     const { reservations, loading, error } = useReservationsContext();
     const [currentMonth, setCurrentMonth] = useState(new Date());

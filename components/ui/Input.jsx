@@ -1,5 +1,4 @@
-//Input.jsx
-const Input = React.forwardRef(({ type = 'text', className = '', ...props }, ref) => (
+const Input = forwardRef(({ type = 'text', className = '', ...props }, ref) => (
     <input
         ref={ref}
         type={type}

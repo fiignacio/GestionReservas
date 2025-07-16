@@ -1,6 +1,6 @@
 function App() {
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [editingReservation, setEditingReservation] = React.useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingReservation, setEditingReservation] = useState(null);
 
     const handleOpenModal = () => {
         setEditingReservation(null);

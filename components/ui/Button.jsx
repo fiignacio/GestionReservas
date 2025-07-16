@@ -1,4 +1,3 @@
-// Button.jsx
 const Button = ({ children, onClick, className = '', disabled = false, ...props }) => (
     <button
         onClick={onClick}
