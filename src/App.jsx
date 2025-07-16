@@ -1,5 +1,3 @@
-// --- /src/App.jsx ---
-// Componente raíz que ensambla toda la aplicación.
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingReservation, setEditingReservation] = useState(null);
@@ -21,7 +19,6 @@ function App() {
 
     return (
         <ReservationsProvider>
-            {/* Toaster para notificaciones globales */}
             <Toaster position="top-right" reverseOrder={false} />
 
             <div className="bg-gray-100 min-h-screen font-sans">
@@ -58,8 +55,4 @@ function App() {
     );
 }
 
-// El punto de entrada de la aplicación.
-// En un proyecto real, este sería el contenido de /src/main.jsx
-// y usaría ReactDOM.createRoot(document.getElementById('root')).render(...);
-// Para este ejemplo, exportamos App como el componente principal.
 export default App;
