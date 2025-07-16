@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import { format, parseISO, differenceInNights, isAfter } from 'date-fns';
+import { format, parseISO, isAfter } from 'date-fns';
+import { differenceInNights } from 'date-fns/differenceInNights';
+
 
 const ReservationForm = ({ reservation, onDone }) => {
     const { addReservation, updateReservation, isSubmitting } = useReservationsContext();
