@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import Input from '../../components/ui/Input';
-import { format } from 'date-fns';
+import { format } from 'date-fns/format';
 import { Search, Edit, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Button from '../../components/ui/Button';
@@ -75,7 +75,6 @@ const ReservationTable = ({ onEdit }) => {
                             <tr key={res.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">{res.nombreCliente}</div>
-                                    {/* Cambio aquí para mostrar el desglose de pasajeros */}
                                     <div className="text-sm text-gray-500">
                                         A: {res.adultos || 0}, N: {res.ninos || 0}, B: {res.bebes || 0}
                                     </div>
