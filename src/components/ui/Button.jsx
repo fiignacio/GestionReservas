@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Button = ({ children, onClick, className = '', disabled = false, ...props }) => (
     <button
         onClick={onClick}
@@ -8,3 +10,5 @@ const Button = ({ children, onClick, className = '', disabled = false, ...props 
         {children}
     </button>
 );
+
+export default Button;

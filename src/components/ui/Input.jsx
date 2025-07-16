@@ -1,3 +1,5 @@
+import React, { forwardRef } from 'react';
+
 const Input = forwardRef(({ type = 'text', className = '', ...props }, ref) => (
     <input
         ref={ref}
@@ -6,3 +8,5 @@ const Input = forwardRef(({ type = 'text', className = '', ...props }, ref) => (
         {...props}
     />
 ));
+
+export default Input;

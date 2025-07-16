@@ -1,14 +1,34 @@
+import React, { useState, useEffect } from 'react';
+import { useReservationsContext } from '../../context/ReservationsContext';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import { format } from 'date-fns';
+
 const ReservationForm = ({ reservation, onDone }) => {
     const { addReservation, updateReservation, isSubmitting } = useReservationsContext();
     const [formData, setFormData] = useState({
-        nombreCliente: reservation?.nombreCliente || '',
-        cantidadPasajeros: reservation?.cantidadPasajeros || 1,
-        fechaCheckIn: reservation ? format(reservation.fechaCheckIn, 'yyyy-MM-dd') : '',
-        fechaCheckOut: reservation ? format(reservation.fechaCheckOut, 'yyyy-MM-dd') : '',
-        vueloIn: reservation?.vueloIn || '',
-        vueloOut: reservation?.vueloOut || '',
-        estado: reservation?.estado || 'Pendiente',
+        nombreCliente: '',
+        cantidadPasajeros: 1,
+        fechaCheckIn: '',
+        fechaCheckOut: '',
+        vueloIn: '',
+        vueloOut: '',
+        estado: 'Pendiente',
     });
+
+    useEffect(() => {
+        if (reservation) {
+            setFormData({
+                nombreCliente: reservation.nombreCliente || '',
+                cantidadPasajeros: reservation.cantidadPasajeros || 1,
+                fechaCheckIn: reservation.fechaCheckIn ? format(reservation.fechaCheckIn, 'yyyy-MM-dd') : '',
+                fechaCheckOut: reservation.fechaCheckOut ? format(reservation.fechaCheckOut, 'yyyy-MM-dd') : '',
+                vueloIn: reservation.vueloIn || '',
+                vueloOut: reservation.vueloOut || '',
+                estado: reservation.estado || 'Pendiente',
+            });
+        }
+    }, [reservation]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,6 +47,7 @@ const ReservationForm = ({ reservation, onDone }) => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
+            {/* ... (el resto del JSX del formulario es igual, no es necesario cambiarlo) ... */}
             <div>
                 <label htmlFor="nombreCliente" className="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
                 <Input id="nombreCliente" name="nombreCliente" value={formData.nombreCliente} onChange={handleChange} required />
@@ -73,3 +94,5 @@ const ReservationForm = ({ reservation, onDone }) => {
         </form>
     );
 };
+
+export default ReservationForm;

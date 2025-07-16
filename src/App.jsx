@@ -1,3 +1,13 @@
+import React, { useState } from 'react';
+import { ReservationsProvider } from './context/ReservationsContext';
+import ReservationsTimeline from './features/reservations/ReservationsTimeline';
+import ReservationTable from './features/reservations/ReservationTable';
+import ReservationForm from './features/reservations/ReservationForm';
+import Modal from './components/ui/Modal';
+import Button from './components/ui/Button';
+import { Toaster } from 'react-hot-toast';
+import { Plus, Calendar as CalendarIcon } from 'lucide-react';
+
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingReservation, setEditingReservation] = useState(null);
