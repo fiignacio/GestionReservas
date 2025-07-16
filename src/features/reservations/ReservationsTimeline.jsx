@@ -1,11 +1,15 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { isAfter } from 'date-fns/isAfter';
+import { isBefore } from 'date-fns/isBefore';
+import { isEqual } from 'date-fns/isEqual';
+import { startOfDay } from 'date-fns/startOfDay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const ReservationsTimeline = () => {
+const ReservationsTimeline = ({ onSelectReservation }) => {
     const { reservations, loading, error } = useReservationsContext();
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -25,11 +29,9 @@ const ReservationsTimeline = () => {
     const getReservationsForDay = useCallback((day) => {
         if (!reservations) return [];
         
-        // Normalizamos el día del calendario a la medianoche para una comparación consistente.
         const currentDayStart = startOfDay(day);
 
         return reservations.filter(res => {
-            // Asegurarnos de que las fechas de la reserva son válidas antes de normalizar
             if (!res.fechaCheckIn || !res.fechaCheckOut) {
                 return false;
             }
@@ -37,10 +39,6 @@ const ReservationsTimeline = () => {
             const checkInStart = startOfDay(res.fechaCheckIn);
             const checkOutStart = startOfDay(res.fechaCheckOut);
 
-            // La reserva se muestra en el calendario si el día actual:
-            // 1. Es igual o posterior al día de check-in.
-            // 2. Es anterior al día de check-out.
-            // Esto cubre la noche del check-in hasta la noche anterior al check-out.
             const isAfterOrOnCheckIn = isEqual(currentDayStart, checkInStart) || isAfter(currentDayStart, checkInStart);
             const isBeforeCheckOut = isBefore(currentDayStart, checkOutStart);
 
@@ -73,11 +71,16 @@ const ReservationsTimeline = () => {
                             </span>
                             <div className="flex-grow overflow-y-auto text-left mt-1 space-y-1">
                                 {reservationsOnDay.map(res => (
-                                    <div key={res.id} title={res.nombreCliente} className={`text-xs p-0.5 rounded truncate ${
-                                        res.estado === 'Confirmada' ? 'bg-green-200 text-green-900' :
-                                        res.estado === 'Pendiente' ? 'bg-yellow-200 text-yellow-900' :
-                                        'bg-red-200 text-red-900'
-                                    }`}>
+                                    <div 
+                                        key={res.id} 
+                                        title={res.nombreCliente} 
+                                        className={`text-xs p-0.5 rounded truncate cursor-pointer ${
+                                            res.estado === 'Confirmada' ? 'bg-green-200 text-green-900' :
+                                            res.estado === 'Pendiente' ? 'bg-yellow-200 text-yellow-900' :
+                                            'bg-red-200 text-red-900'
+                                        }`}
+                                        onClick={() => onSelectReservation(res)}
+                                    >
                                         {res.nombreCliente}
                                     </div>
                                 ))}
