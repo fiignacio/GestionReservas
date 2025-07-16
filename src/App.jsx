@@ -46,7 +46,7 @@ function App() {
                 </header>
 
                 <main className="container mx-auto p-4 space-y-8">
-                    <ReservationsTimeline />
+                    <ReservationsTimeline onSelectReservation={handleEdit} />
                     <ReservationTable onEdit={handleEdit} />
                 </main>
 
