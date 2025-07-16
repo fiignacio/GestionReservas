@@ -2,7 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
-import { format } from 'date-fns/format';
 import { addMonths } from 'date-fns/addMonths';
 import { subMonths } from 'date-fns/subMonths';
 import { startOfMonth } from 'date-fns/startOfMonth';
@@ -12,10 +11,10 @@ import { endOfWeek } from 'date-fns/endOfWeek';
 import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
 import { isSameMonth } from 'date-fns/isSameMonth';
 import { isSameDay } from 'date-fns/isSameDay';
-import { isAfter } from 'date-fns/isAfter';
 import { isBefore } from 'date-fns/isBefore';
 import { isEqual } from 'date-fns/isEqual';
 import { startOfDay } from 'date-fns/startOfDay';
+import { format, parseISO, isAfter, differenceInNights } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ReservationsTimeline = ({ onSelectReservation }) => {
