@@ -3,7 +3,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'fireba
 import { db } from '../firebase/config';
 import { useReservations } from '../hooks/useReservations';
 import { toast } from 'react-hot-toast';
-import { * } from 'date-fns';
+import { format, parseISO, isAfter, differenceInNights } from 'date-fns';
 
 const ReservationsContext = createContext();
 
