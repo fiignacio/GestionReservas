@@ -1,4 +1,4 @@
-// --- /src/App.jsx ---
+// ---add coments /src/App.jsx ---
 // Componente raíz que ensambla toda la aplicación.
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
