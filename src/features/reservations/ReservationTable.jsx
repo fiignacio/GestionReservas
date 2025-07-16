@@ -48,7 +48,6 @@ const ReservationTable = ({ onEdit }) => {
 
     return (
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-            {/* ... (el resto del JSX de la tabla es igual, no es necesario cambiarlo) ... */}
             <h2 className="text-xl font-bold text-gray-800 mb-4">Listado de Reservas</h2>
             <div className="relative mb-4">
                 <Input
@@ -76,7 +75,10 @@ const ReservationTable = ({ onEdit }) => {
                             <tr key={res.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">{res.nombreCliente}</div>
-                                    <div className="text-sm text-gray-500">{res.cantidadPasajeros} pasajero(s)</div>
+                                    {/* Cambio aquí para mostrar el desglose de pasajeros */}
+                                    <div className="text-sm text-gray-500">
+                                        A: {res.adultos || 0}, N: {res.ninos || 0}, B: {res.bebes || 0}
+                                    </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
                                     <div className="text-sm text-gray-900">{format(res.fechaCheckIn, 'dd/MM/yyyy')}</div>
