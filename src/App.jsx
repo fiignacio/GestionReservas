@@ -1,8 +1,6 @@
-// ---add coments /src/App.jsx ---
-// Componente raíz que ensambla toda la aplicación.
 function App() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingReservation, setEditingReservation] = useState(null);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [editingReservation, setEditingReservation] = React.useState(null);
 
     const handleOpenModal = () => {
         setEditingReservation(null);
@@ -63,8 +61,3 @@ function App() {
 // y usaría ReactDOM.createRoot(document.getElementById('root')).render(...);
 // Para este ejemplo, exportamos App como el componente principal.
 export default App;
-
-
-
-
-
