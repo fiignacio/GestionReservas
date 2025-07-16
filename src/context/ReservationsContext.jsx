@@ -15,17 +15,20 @@ export const ReservationsProvider = ({ children }) => {
     const { reservations, loading, error } = useReservations();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Las funciones ahora manejan el nuevo `reservationData` con todos los campos.
     const addReservation = async (reservationData) => {
         if (!db) return toast.error("Firebase no está configurado.");
         setIsSubmitting(true);
         try {
-            await addDoc(collection(db, "reservas"), {
+            const dataToSave = {
                 ...reservationData,
                 fechaCheckIn: Timestamp.fromDate(parseISO(reservationData.fechaCheckIn)),
                 fechaCheckOut: Timestamp.fromDate(parseISO(reservationData.fechaCheckOut)),
-            });
+            };
+            await addDoc(collection(db, "reservas"), dataToSave);
             toast.success("Reserva creada con éxito!");
         } catch (e) {
+            console.error(e);
             toast.error("Error al crear la reserva.");
         } finally {
             setIsSubmitting(false);
@@ -36,13 +39,15 @@ export const ReservationsProvider = ({ children }) => {
         if (!db) return toast.error("Firebase no está configurado.");
         setIsSubmitting(true);
         try {
-            await updateDoc(doc(db, "reservas", id), {
+             const dataToSave = {
                 ...reservationData,
                 fechaCheckIn: Timestamp.fromDate(parseISO(reservationData.fechaCheckIn)),
                 fechaCheckOut: Timestamp.fromDate(parseISO(reservationData.fechaCheckOut)),
-            });
+            };
+            await updateDoc(doc(db, "reservas", id), dataToSave);
             toast.success("Reserva actualizada con éxito!");
         } catch (e) {
+            console.error(e);
             toast.error("Error al actualizar la reserva.");
         } finally {
             setIsSubmitting(false);
