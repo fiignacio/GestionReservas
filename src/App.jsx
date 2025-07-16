@@ -1,3 +1,5 @@
+// --- /src/App.jsx ---
+// Componente raíz que ensambla toda la aplicación.
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingReservation, setEditingReservation] = useState(null);
