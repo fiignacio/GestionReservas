@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -24,7 +24,28 @@ const ReservationsTimeline = () => {
 
     const getReservationsForDay = useCallback((day) => {
         if (!reservations) return [];
-        return reservations.filter(res => day >= res.fechaCheckIn && day <= res.fechaCheckOut);
+        
+        // Normalizamos el día del calendario a la medianoche para una comparación consistente.
+        const currentDayStart = startOfDay(day);
+
+        return reservations.filter(res => {
+            // Asegurarnos de que las fechas de la reserva son válidas antes de normalizar
+            if (!res.fechaCheckIn || !res.fechaCheckOut) {
+                return false;
+            }
+
+            const checkInStart = startOfDay(res.fechaCheckIn);
+            const checkOutStart = startOfDay(res.fechaCheckOut);
+
+            // La reserva se muestra en el calendario si el día actual:
+            // 1. Es igual o posterior al día de check-in.
+            // 2. Es anterior al día de check-out.
+            // Esto cubre la noche del check-in hasta la noche anterior al check-out.
+            const isAfterOrOnCheckIn = isEqual(currentDayStart, checkInStart) || isAfter(currentDayStart, checkInStart);
+            const isBeforeCheckOut = isBefore(currentDayStart, checkOutStart);
+
+            return isAfterOrOnCheckIn && isBeforeCheckOut;
+        });
     }, [reservations]);
 
     if (loading) return <Spinner />;
@@ -32,7 +53,6 @@ const ReservationsTimeline = () => {
 
     return (
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-            {/* ... (el resto del JSX del timeline es igual, no es necesario cambiarlo) ... */}
             <div className="flex justify-between items-center mb-4">
                 <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100"><ChevronLeft /></button>
                 <h2 className="text-xl font-bold text-gray-800 capitalize">
