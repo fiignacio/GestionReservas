@@ -3,7 +3,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'fireba
 import { db } from '../firebase/config';
 import { useReservations } from '../hooks/useReservations';
 import { toast } from 'react-hot-toast';
-import { parseISO } from 'date-fns';
+import { parseISO } from 'date-fns/parseISO';
 
 const ReservationsContext = createContext();
 
@@ -15,7 +15,6 @@ export const ReservationsProvider = ({ children }) => {
     const { reservations, loading, error } = useReservations();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Las funciones ahora manejan el nuevo `reservationData` con todos los campos.
     const addReservation = async (reservationData) => {
         if (!db) return toast.error("Firebase no está configurado.");
         setIsSubmitting(true);
