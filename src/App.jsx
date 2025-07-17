@@ -3,6 +3,7 @@ import { ReservationsProvider } from './context/ReservationsContext';
 import ReservationsTimeline from './features/reservations/ReservationsTimeline';
 import ReservationTable from './features/reservations/ReservationTable';
 import ReservationForm from './features/reservations/ReservationForm';
+import UpcomingReservations from './features/reservations/UpcomingReservations';
 import Modal from './components/ui/Modal';
 import Button from './components/ui/Button';
 import { Toaster } from 'react-hot-toast';
@@ -46,6 +47,7 @@ function App() {
                 </header>
 
                 <main className="container mx-auto p-4 space-y-8">
+                    <UpcomingReservations />
                     <ReservationsTimeline onSelectReservation={handleEdit} />
                     <ReservationTable onEdit={handleEdit} />
                 </main>
