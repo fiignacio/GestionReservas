@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isEqual, startOfDay, isWithinInterval } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const cabinColors = {
@@ -45,20 +45,14 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
     const getReservationsForDay = useCallback((day) => {
         if (!upcomingReservations) return [];
         
-        const currentDayStart = startOfDay(day);
-
         return upcomingReservations.filter(res => {
             if (!res.fechaCheckIn || !res.fechaCheckOut) {
                 return false;
             }
-
-            const checkInStart = startOfDay(res.fechaCheckIn);
-            const checkOutStart = startOfDay(res.fechaCheckOut);
-
-            const isAfterOrOnCheckIn = isEqual(currentDayStart, checkInStart) || isAfter(currentDayStart, checkInStart);
-            const isBeforeOrOnCheckOut = isEqual(currentDayStart, checkOutStart) || isBefore(currentDayStart, checkOutStart);
-
-            return isAfterOrOnCheckIn && isBeforeOrOnCheckOut;
+            return isWithinInterval(day, {
+                start: startOfDay(res.fechaCheckIn),
+                end: startOfDay(res.fechaCheckOut)
+            });
         });
     }, [upcomingReservations]);
 
