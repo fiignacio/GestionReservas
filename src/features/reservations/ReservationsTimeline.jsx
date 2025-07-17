@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
-import { addMonths } from 'date-fns';
+import { addMonths } from "date-fns";
 import { subMonths } from 'date-fns/subMonths';
 import { startOfMonth } from 'date-fns/startOfMonth';
 import { endOfMonth } from 'date-fns/endOfMonth';
