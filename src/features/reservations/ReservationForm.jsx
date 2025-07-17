@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import { format, parseISO, isAfter, differenceInWeeks  } from 'date-fns';
+import { format, parseISO, isAfter } from 'date-fns';
 
 
 const ReservationForm = ({ reservation, onDone }) => {
@@ -51,7 +51,10 @@ const ReservationForm = ({ reservation, onDone }) => {
             const checkOutDate = parseISO(fechaCheckOut);
 
             if (isAfter(checkOutDate, checkInDate)) {
-                const noches = differenceInNights(checkOutDate, checkInDate);
+                // Cálculo manual de noches para evitar problemas de importación.
+                const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
+                const noches = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
                 const precioAdulto = temporada === 'Alta' ? 30000 : 25000;
                 const precioNino = 15000;
                 const total = noches * ((parseInt(adultos, 10) || 0) * precioAdulto + (parseInt(ninos, 10) || 0) * precioNino);
