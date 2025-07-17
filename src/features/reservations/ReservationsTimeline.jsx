@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
@@ -16,6 +16,18 @@ const cabinColors = {
 const ReservationsTimeline = ({ onSelectReservation }) => {
     const { upcomingReservations, loading, error } = useReservationsContext();
     const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [initialJumpDone, setInitialJumpDone] = useState(false);
+
+    useEffect(() => {
+        if (!loading && upcomingReservations.length > 0 && !initialJumpDone) {
+            const earliestDate = upcomingReservations.reduce((earliest, current) => {
+                return current.fechaCheckIn < earliest ? current.fechaCheckIn : earliest;
+            }, upcomingReservations[0].fechaCheckIn);
+            
+            setCurrentMonth(earliestDate);
+            setInitialJumpDone(true);
+        }
+    }, [loading, upcomingReservations, initialJumpDone]);
 
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
@@ -50,7 +62,7 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
         });
     }, [upcomingReservations]);
 
-    if (loading) return <Spinner />;
+    if (loading && !initialJumpDone) return <Spinner />;
     if (error) return <p className="text-red-500 text-center p-4">{error}</p>;
 
     return (
