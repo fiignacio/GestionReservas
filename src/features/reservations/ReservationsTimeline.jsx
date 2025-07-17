@@ -43,10 +43,11 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
             const checkInStart = startOfDay(res.fechaCheckIn);
             const checkOutStart = startOfDay(res.fechaCheckOut);
 
+            // Lógica corregida para ser inclusiva
             const isAfterOrOnCheckIn = isEqual(currentDayStart, checkInStart) || isAfter(currentDayStart, checkInStart);
-            const isBeforeCheckOut = isBefore(currentDayStart, checkOutStart);
+            const isBeforeOrOnCheckOut = isEqual(currentDayStart, checkOutStart) || isBefore(currentDayStart, checkOutStart);
 
-            return isAfterOrOnCheckIn && isBeforeCheckOut;
+            return isAfterOrOnCheckIn && isBeforeOrOnCheckOut;
         });
     }, [reservations]);
 
