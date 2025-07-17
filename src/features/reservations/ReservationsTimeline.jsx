@@ -14,7 +14,7 @@ import { isSameDay } from 'date-fns';
 import { isBefore } from 'date-fns';
 import { isEqual } from 'date-fns';
 import { startOfDay } from 'date-fns';
-import { format, parseISO, isAfter, differenceInNights } from 'date-fns';
+import { format, parseISO, isAfter, differenceInWeeks  } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ReservationsTimeline = ({ onSelectReservation }) => {
