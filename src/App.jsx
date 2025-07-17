@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ReservationsProvider } from './context/ReservationsContext';
 import ReservationsTimeline from './features/reservations/ReservationsTimeline';
-import UpcomingReservationTable from './features/reservations/ReservationTable'; // Renombrado
+import UpcomingReservationTable from './features/reservations/UpcomingReservationTable';
 import PastReservations from './features/reservations/PastReservations';
 import ReservationForm from './features/reservations/ReservationForm';
 import UpcomingReservations from './features/reservations/UpcomingReservations';
