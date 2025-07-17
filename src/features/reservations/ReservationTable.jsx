@@ -76,7 +76,7 @@ const ReservationTable = ({ onEdit }) => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">{res.nombreCliente}</div>
                                     <div className="text-sm text-gray-500">
-                                        A: {res.adultos || 0}, N: {res.ninos || 0}, B: {res.bebes || 0}
+                                        {res.tipoCabana ? `${res.tipoCabana} | ` : ''}A: {res.adultos || 0}, N: {res.ninos || 0}, B: {res.bebes || 0}
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
