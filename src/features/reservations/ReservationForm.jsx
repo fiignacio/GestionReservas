@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import { format, parseISO, isAfter, differenceInNights } from 'date-fns';
+import { format, parseISO, isAfter, differenceInWeeks  } from 'date-fns';
 
 
 const ReservationForm = ({ reservation, onDone }) => {
