@@ -49,6 +49,7 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
             if (!res.fechaCheckIn || !res.fechaCheckOut) {
                 return false;
             }
+            // Corrección: Usar isWithinInterval para una lógica más clara y robusta.
             return isWithinInterval(day, {
                 start: startOfDay(res.fechaCheckIn),
                 end: startOfDay(res.fechaCheckOut)
