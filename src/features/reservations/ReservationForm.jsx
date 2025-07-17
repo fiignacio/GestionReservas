@@ -16,6 +16,7 @@ const ReservationForm = ({ reservation, onDone }) => {
         fechaCheckIn: '',
         fechaCheckOut: '',
         temporada: 'Baja',
+        tipoCabana: 'Pequeña', // Nuevo campo
         vueloIn: 'LA841',
         vueloOut: 'LA842',
         tipoAbono: 'porcentaje',
@@ -34,6 +35,7 @@ const ReservationForm = ({ reservation, onDone }) => {
                 fechaCheckIn: reservation.fechaCheckIn ? format(reservation.fechaCheckIn, 'yyyy-MM-dd') : '',
                 fechaCheckOut: reservation.fechaCheckOut ? format(reservation.fechaCheckOut, 'yyyy-MM-dd') : '',
                 temporada: reservation.temporada || 'Baja',
+                tipoCabana: reservation.tipoCabana || 'Pequeña', // Nuevo campo
                 vueloIn: reservation.vueloIn || 'LA841',
                 vueloOut: reservation.vueloOut || 'LA842',
                 tipoAbono: reservation.tipoAbono || 'porcentaje',
@@ -51,7 +53,6 @@ const ReservationForm = ({ reservation, onDone }) => {
             const checkOutDate = parseISO(fechaCheckOut);
 
             if (isAfter(checkOutDate, checkInDate)) {
-                // Cálculo manual de noches para evitar problemas de importación.
                 const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
                 const noches = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
@@ -135,6 +136,16 @@ const ReservationForm = ({ reservation, onDone }) => {
                         <label className="flex items-center"><Input type="radio" name="temporada" value="Alta" checked={formData.temporada === 'Alta'} onChange={handleChange} className="h-4 w-4" /><span className="ml-2">Alta</span></label>
                     </div>
                 </div>
+            </div>
+            {/* Nueva sección para Tipo de Cabaña */}
+            <div>
+                <label htmlFor="tipoCabana" className="block text-sm font-medium text-gray-700">Tipo de Cabaña</label>
+                <select id="tipoCabana" name="tipoCabana" value={formData.tipoCabana} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option>Pequeña</option>
+                    <option>Mediana 1</option>
+                    <option>Mediana 2</option>
+                    <option>Grande</option>
+                </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div>
