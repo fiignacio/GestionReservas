@@ -5,6 +5,14 @@ import { es } from 'date-fns/locale';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+const cabinColors = {
+    'Pequeña': 'bg-blue-200 text-blue-900',
+    'Mediana 1': 'bg-purple-200 text-purple-900',
+    'Mediana 2': 'bg-indigo-200 text-indigo-900',
+    'Grande': 'bg-teal-200 text-teal-900',
+    'default': 'bg-gray-200 text-gray-900'
+};
+
 const ReservationsTimeline = ({ onSelectReservation }) => {
     const { reservations, loading, error } = useReservationsContext();
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -69,12 +77,8 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
                                 {reservationsOnDay.map(res => (
                                     <div 
                                         key={res.id} 
-                                        title={res.nombreCliente} 
-                                        className={`text-xs p-0.5 rounded truncate cursor-pointer ${
-                                            res.estado === 'Confirmada' ? 'bg-green-200 text-green-900' :
-                                            res.estado === 'Pendiente' ? 'bg-yellow-200 text-yellow-900' :
-                                            'bg-red-200 text-red-900'
-                                        }`}
+                                        title={`${res.nombreCliente} - ${res.tipoCabana || ''}`}
+                                        className={`text-xs p-0.5 rounded truncate cursor-pointer ${cabinColors[res.tipoCabana] || cabinColors.default}`}
                                         onClick={() => onSelectReservation(res)}
                                     >
                                         {res.nombreCliente}
