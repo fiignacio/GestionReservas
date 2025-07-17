@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ReservationsProvider } from './context/ReservationsContext';
 import ReservationsTimeline from './features/reservations/ReservationsTimeline';
-import ReservationTable from './features/reservations/ReservationTable';
+import UpcomingReservationTable from './features/reservations/ReservationTable'; // Renombrado
+import PastReservations from './features/reservations/PastReservations';
 import ReservationForm from './features/reservations/ReservationForm';
 import UpcomingReservations from './features/reservations/UpcomingReservations';
 import Modal from './components/ui/Modal';
@@ -12,6 +13,7 @@ import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingReservation, setEditingReservation] = useState(null);
+    const [activeTab, setActiveTab] = useState('current'); // 'current' o 'past'
 
     const handleOpenModal = () => {
         setEditingReservation(null);
@@ -44,12 +46,36 @@ function App() {
                             Nueva Reserva
                         </Button>
                     </div>
+                    {/* Sistema de Pestañas */}
+                    <nav className="container mx-auto px-4 border-b border-gray-200">
+                        <div className="-mb-px flex space-x-8">
+                            <button
+                                onClick={() => setActiveTab('current')}
+                                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'current' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                            >
+                                Actual
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('past')}
+                                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'past' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                            >
+                                Historial
+                            </button>
+                        </div>
+                    </nav>
                 </header>
 
                 <main className="container mx-auto p-4 space-y-8">
-                    <UpcomingReservations />
-                    <ReservationsTimeline onSelectReservation={handleEdit} />
-                    <ReservationTable onEdit={handleEdit} />
+                    {activeTab === 'current' && (
+                        <>
+                            <UpcomingReservations />
+                            <ReservationsTimeline onSelectReservation={handleEdit} />
+                            <UpcomingReservationTable onEdit={handleEdit} />
+                        </>
+                    )}
+                    {activeTab === 'past' && (
+                        <PastReservations />
+                    )}
                 </main>
 
                 <Modal
