@@ -7,8 +7,8 @@ import { Search, Edit, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Button from '../../components/ui/Button';
 
-const ReservationTable = ({ onEdit }) => {
-    const { reservations, loading, error, deleteReservation } = useReservationsContext();
+const UpcomingReservationTable = ({ onEdit }) => {
+    const { upcomingReservations, loading, error, deleteReservation } = useReservationsContext();
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleDeleteClick = (id) => {
@@ -37,18 +37,18 @@ const ReservationTable = ({ onEdit }) => {
     }
 
     const filteredReservations = useMemo(() => {
-        if (!reservations) return [];
-        return reservations.filter(res =>
+        if (!upcomingReservations) return [];
+        return upcomingReservations.filter(res =>
             res.nombreCliente.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [reservations, searchTerm]);
+    }, [upcomingReservations, searchTerm]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="text-red-500 text-center p-4">{error}</p>;
 
     return (
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Listado de Reservas</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Próximas Reservas</h2>
             <div className="relative mb-4">
                 <Input
                     type="text"
@@ -114,4 +114,4 @@ const ReservationTable = ({ onEdit }) => {
     );
 };
 
-export default ReservationTable;
+export default UpcomingReservationTable;
