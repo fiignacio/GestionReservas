@@ -19,7 +19,7 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
     const [initialJumpDone, setInitialJumpDone] = useState(false);
 
     useEffect(() => {
-        if (!loading && upcomingReservations.length > 0 && !initialJumpDone) {
+        if (!loading && upcomingReservations && upcomingReservations.length > 0 && !initialJumpDone) {
             const earliestDate = upcomingReservations.reduce((earliest, current) => {
                 return current.fechaCheckIn < earliest ? current.fechaCheckIn : earliest;
             }, upcomingReservations[0].fechaCheckIn);
