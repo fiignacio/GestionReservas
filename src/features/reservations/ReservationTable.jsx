@@ -2,10 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import Input from '../../components/ui/Input';
+import { format } from 'date-fns';
 import { Search, Edit, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Button from '../../components/ui/Button';
-import { format, parseISO, isAfter, differenceInWeeks  } from 'date-fns';
 
 const ReservationTable = ({ onEdit }) => {
     const { reservations, loading, error, deleteReservation } = useReservationsContext();
