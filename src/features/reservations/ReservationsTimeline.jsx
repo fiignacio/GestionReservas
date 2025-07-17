@@ -14,7 +14,7 @@ const cabinColors = {
 };
 
 const ReservationsTimeline = ({ onSelectReservation }) => {
-    const { reservations, loading, error } = useReservationsContext();
+    const { upcomingReservations, loading, error } = useReservationsContext();
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -31,11 +31,11 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
     const dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
     const getReservationsForDay = useCallback((day) => {
-        if (!reservations) return [];
+        if (!upcomingReservations) return [];
         
         const currentDayStart = startOfDay(day);
 
-        return reservations.filter(res => {
+        return upcomingReservations.filter(res => {
             if (!res.fechaCheckIn || !res.fechaCheckOut) {
                 return false;
             }
@@ -43,13 +43,12 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
             const checkInStart = startOfDay(res.fechaCheckIn);
             const checkOutStart = startOfDay(res.fechaCheckOut);
 
-            // Lógica corregida para ser inclusiva
             const isAfterOrOnCheckIn = isEqual(currentDayStart, checkInStart) || isAfter(currentDayStart, checkInStart);
             const isBeforeOrOnCheckOut = isEqual(currentDayStart, checkOutStart) || isBefore(currentDayStart, checkOutStart);
 
             return isAfterOrOnCheckIn && isBeforeOrOnCheckOut;
         });
-    }, [reservations]);
+    }, [upcomingReservations]);
 
     if (loading) return <Spinner />;
     if (error) return <p className="text-red-500 text-center p-4">{error}</p>;
