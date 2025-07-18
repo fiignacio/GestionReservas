@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
@@ -31,8 +31,9 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
     useEffect(() => {
         if (!loading && Array.isArray(upcomingReservations) && upcomingReservations.length > 0 && !initialJumpDone) {
             const earliestDate = upcomingReservations.reduce((earliest, current) => {
-                return current.fechaCheckIn < earliest ? current.fechaCheckIn : earliest;
-            }, upcomingReservations[0].fechaCheckIn);
+                const currentDate = new Date(current.fechaCheckIn);
+                return currentDate < earliest ? currentDate : earliest;
+            }, new Date(upcomingReservations[0].fechaCheckIn));
             
             setCurrentMonth(earliestDate);
             setInitialJumpDone(true);
@@ -63,7 +64,14 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
         const viewEnd = daysInMonth[daysInMonth.length - 1];
 
         // Filtra solo las reservas visibles en el mes actual y las ordena
-        const reservationsInView = upcomingReservations.filter(res => {
+        const reservationsInView = upcomingReservations
+            .map(res => ({
+                ...res,
+                // Aseguramos que las fechas sean objetos Date
+                fechaCheckIn: new Date(res.fechaCheckIn),
+                fechaCheckOut: new Date(res.fechaCheckOut)
+            }))
+            .filter(res => {
                 const resStart = startOfDay(res.fechaCheckIn);
                 const resEnd = startOfDay(res.fechaCheckOut);
                 return isWithinInterval(resStart, { start: viewStart, end: viewEnd }) ||
@@ -104,14 +112,15 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
     const weekHeights = useMemo(() => {
         const heights = [];
         for (let i = 0; i < daysInMonth.length; i += 7) {
-            const weekDays = daysInMonth.slice(i, i + 7);
+            const weekStart = daysInMonth[i];
+            const weekEnd = daysInMonth[i + 6];
             let maxLane = -1;
             reservationLayout.forEach(res => {
                 const resStart = startOfDay(res.fechaCheckIn);
                 const resEnd = startOfDay(res.fechaCheckOut);
-                if (isWithinInterval(resStart, { start: weekDays[0], end: weekDays[6]}) ||
-                    isWithinInterval(subDays(resEnd, 1), { start: weekDays[0], end: weekDays[6]}) ||
-                    (isBefore(resStart, weekDays[0]) && isAfter(resEnd, weekDays[6]))) {
+                if (isWithinInterval(resStart, { start: weekStart, end: weekEnd}) ||
+                    isWithinInterval(subDays(resEnd, 1), { start: weekStart, end: weekEnd}) ||
+                    (isBefore(resStart, weekStart) && isAfter(resEnd, weekEnd))) {
                     if (res.lane > maxLane) {
                         maxLane = res.lane;
                     }
@@ -183,15 +192,18 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
 
                         if (duration <= 0) duration = 1; // Mínimo 1 día de ancho
 
+                        const weekIndex = Math.floor(startIndex / 7);
+                        const topOffset = weekHeights.slice(0, weekIndex).reduce((acc, height) => acc + height, 0);
+
                         return (
                             <div
                                 key={res.id}
                                 title={`${res.nombreCliente} - ${res.tipoCabana}`}
                                 className={`absolute h-7 flex items-center p-1.5 rounded truncate cursor-pointer shadow-sm ${CABIN_COLORS[res.tipoCabana] || CABIN_COLORS.default}`}
                                 style={{
-                                    top: `${weekHeights.slice(0, Math.floor(startIndex / 7)).reduce((a, b) => a + b, 0) + DAY_NUMBER_HEIGHT + res.lane * (BAR_HEIGHT + BAR_GAP)}px`,
+                                    top: `${topOffset + DAY_NUMBER_HEIGHT + res.lane * (BAR_HEIGHT + BAR_GAP)}px`,
                                     left: `${(startIndex % 7) * (100 / 7)}%`,
-                                    width: `${duration * (100 / 7)}%`,
+                                    width: `calc(${duration * (100 / 7)}% - 4px)`, // Pequeño ajuste para el espaciado
                                     height: `${BAR_HEIGHT}px`,
                                 }}
                                 onClick={() => onSelectReservation(res)}
