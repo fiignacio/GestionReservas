@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useReservations } from '../hooks/useReservations';
 import { toast } from 'react-hot-toast';
-import { parseISO } from 'date-fns';
+import { parseISO, isBefore, startOfToday } from 'date-fns';
 
 const ReservationsContext = createContext();
 
@@ -12,8 +12,18 @@ export const useReservationsContext = () => {
 };
 
 export const ReservationsProvider = ({ children }) => {
+    // 1. Obtenemos TODAS las reservas desde el hook.
     const { reservations, loading, error } = useReservations();
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // 2. Filtramos y categorizamos las reservas aquí, en el contexto.
+    const { upcomingReservations, pastReservations } = useMemo(() => {
+        const today = startOfToday();
+        const upcoming = reservations.filter(res => !isBefore(res.fechaCheckOut, today));
+        const past = reservations.filter(res => isBefore(res.fechaCheckOut, today));
+        return { upcomingReservations: upcoming, pastReservations: past };
+    }, [reservations]);
+
 
     const addReservation = async (reservationData) => {
         if (!db) return toast.error("Firebase no está configurado.");
@@ -66,8 +76,10 @@ export const ReservationsProvider = ({ children }) => {
         }
     };
 
+    // 3. Proveemos las listas ya filtradas al resto de la aplicación.
     const value = {
-        reservations,
+        upcomingReservations,
+        pastReservations,
         loading,
         error,
         isSubmitting,

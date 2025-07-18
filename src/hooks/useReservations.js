@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
+// Este hook ahora solo se encarga de una cosa: obtener todas las reservas.
 export const useReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -27,6 +28,10 @@ export const useReservations = () => {
                         fechaCheckOut: data.fechaCheckOut?.toDate(),
                     };
                 }).filter(res => res.fechaCheckIn && res.fechaCheckOut);
+                
+                // Ordenar por fecha de check-in para asegurar consistencia
+                reservationsData.sort((a, b) => a.fechaCheckIn - b.fechaCheckIn);
+
                 setReservations(reservationsData);
                 setLoading(false);
             },
