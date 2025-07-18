@@ -101,7 +101,7 @@ const ReservationsTimeline = ({ onSelectReservation }) => {
                 </div>
                 <div className="space-y-4">
                     {daysInGrid.filter(d => isSameMonth(d, currentMonth)).map(day => {
-                        const reservationsOnDay = upcomingReservations.filter(res => isWithinInterval(day, {start: startOfDay(res.fechaCheckIn), end: startOfDay(res.fechaCheckOut)}));
+                        const reservationsOnDay = (upcomingReservations || []).filter(res => isWithinInterval(day, {start: startOfDay(res.fechaCheckIn), end: startOfDay(res.fechaCheckOut)}));
                         return (
                             <div key={day.toString()}>
                                 <h3 className={`font-bold text-sm ${isSameDay(day, new Date()) ? 'text-blue-600' : 'text-gray-700'}`}>
