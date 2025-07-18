@@ -29,7 +29,7 @@ export const useReservations = () => {
                 }).filter(res => res.fechaCheckIn && res.fechaCheckOut);
                 setReservations(reservationsData);
                 setLoading(false);
-                console.log(reservationData);
+                console.log(reservationData.length());
             },
             (err) => {
                 console.error("Error obteniendo las reservas: ", err);
