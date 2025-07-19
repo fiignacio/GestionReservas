@@ -12,9 +12,11 @@ export const useReservationsContext = () => {
 };
 
 export const ReservationsProvider = ({ children }) => {
+    // 1. Obtenemos TODAS las reservas desde el hook.
     const { reservations, loading, error } = useReservations();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // 2. Filtramos y categorizamos las reservas aquí, en el contexto.
     const { upcomingReservations, pastReservations } = useMemo(() => {
         const today = startOfToday();
         const upcoming = reservations.filter(res => !isBefore(res.fechaCheckOut, today));
@@ -74,6 +76,7 @@ export const ReservationsProvider = ({ children }) => {
         }
     };
 
+    // 3. Proveemos las listas ya filtradas al resto de la aplicación.
     const value = {
         upcomingReservations,
         pastReservations,
