@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useReservationsContext } from '../../context/ReservationsContext';
 import Spinner from '../../components/ui/Spinner';
 import { es } from 'date-fns/locale';
-import { format, addDays, startOfToday, isWithinInterval, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, differenceInDays, startOfWeek } from 'date-fns';
+import { format, addDays, startOfToday,startOfDay, isWithinInterval, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, differenceInDays, startOfWeek } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const cabinColors = {
